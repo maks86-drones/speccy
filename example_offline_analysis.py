@@ -1,18 +1,18 @@
 from spectrum_file import SpectrumFileReader
-import cPickle
+import pickle
 import os
 
 
 def process(fn):
-    print "processing '%s':" % fn
+    print( "processing '%s':" % fn)
     f = open(fn, 'r')
     while True:
         try:
-            device_id, ts, sample_data = cPickle.load(f)
+            device_id, ts, sample_data = pickle.load(f)
             for tsf, freq, noise, rssi, pwrs in SpectrumFileReader.decode(sample_data):
-                print device_id, ts, tsf, freq, noise, rssi
+                print( device_id, ts, tsf, freq, noise, rssi)
                 for carrier_freq, pwr_level in pwrs.iteritems():
-                    print carrier_freq, pwr_level
+                    print( carrier_freq, pwr_level)
         except EOFError:
             break
 

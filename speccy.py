@@ -13,7 +13,7 @@ import math
 from scanner import Scanner
 from datetime import datetime
 import os
-import cPickle
+import pickle
 
 
 class Speccy(object):
@@ -132,7 +132,7 @@ class Speccy(object):
                 self.bg_sample_count_limit += 50
                 self.bg_sample_count = 0
                 self.reset_viewport()
-                print "set bg persistence cnt to %d" % self.bg_sample_count_limit
+                print( "set bg persistence cnt to %d" % self.bg_sample_count_limit)
             else:
                 self.scanners[self.dev_idx].cmd_samplecount_up()
         elif key == 'Down':
@@ -142,17 +142,17 @@ class Speccy(object):
                     self.bg_sample_count_limit = 0
                 self.bg_sample_count = 0
                 self.reset_viewport()
-                print "set bg persistence cnt to %d" % self.bg_sample_count_limit
+                print( "set bg persistence cnt to %d" % self.bg_sample_count_limit)
             else:
                 self.scanners[self.dev_idx].cmd_samplecount_down()
         elif key == 'd':
             if self.dump_to_file:
                 self.dump_to_file = False
                 self.dump_file.close()
-                print "dump to file finished"
+                print( "dump to file finished")
             else:
                 fn = "./spectral_data/%s.bin" % datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                print "start dumping to %s" % fn
+                print( "start dumping to %s" % fn)
                 self.dump_file = open(fn, 'w')
                 self.dump_to_file = True
         elif key == 'u':
@@ -269,7 +269,7 @@ class Speccy(object):
 
             ts, xydata = scanner.file_reader.sample_queue.get()
             if self.dump_to_file:
-                cPickle.dump((scanner.idx, ts, xydata), self.dump_file)
+                pickle.dump((scanner.idx, ts, xydata), self.dump_file)
 
             if not self.ui_update:
                 continue
@@ -399,6 +399,6 @@ class Speccy(object):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print "\nUsage: \n  $ sudo python speccy.py wlanX [wlanY] [wlanZ] [wlanA]\n"
+        print( "\nUsage: \n  $ sudo python speccy.py wlanX [wlanY] [wlanZ] [wlanA]\n")
         exit(0)
     Speccy(sys.argv[1:]).main()
